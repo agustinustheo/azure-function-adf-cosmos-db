@@ -1,0 +1,26 @@
+{
+	"name": "Attachments",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "TrainingFunctions",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ToDoListID",
+				"type": "varchar"
+			},
+			{
+				"name": "Path",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Attachments"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

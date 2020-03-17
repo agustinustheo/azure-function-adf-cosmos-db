@@ -1,0 +1,121 @@
+{
+	"name": "SQLCosmosDBSync",
+	"properties": {
+		"description": "Data factory to sync Azure SQL and CosmosDB data.",
+		"activities": [
+			{
+				"name": "LookupItems",
+				"description": "GetItems",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT * FROM ToDoList",
+						"queryTimeout": "02:00:00"
+					},
+					"dataset": {
+						"referenceName": "ToDoList",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEachData",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LookupItems",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('LookupItems').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "InsertIntoCosmosDB",
+							"description": "InsertIntoCosmosDB",
+							"type": "AzureFunctionActivity",
+							"dependsOn": [
+								{
+									"activity": "LookupAttachmentsByID",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"functionName": "HttpTrigger",
+								"method": "POST",
+								"headers": {
+									"Content-Type": "application/json"
+								},
+								"body": {
+									"value": "@json(\nconcat('{\"ID\":\"' , item().ID , '\",' ,\n'\"Description\":\"' , item().Description , '\",' ,\n'\"PIC\":\"' , item().PIC , '\",' ,\n'\"Attachments\":' , activity('LookupAttachmentsByID').output.value , ',' ,\n'\"IsComplete\":' , item().IsComplete , '}'))",
+									"type": "Expression"
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "HttpTrigger",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "LookupAttachmentsByID",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "SELECT * FROM Attachments WHERE ToDoListID = '@{item().ID}'",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00"
+								},
+								"dataset": {
+									"referenceName": "Attachments",
+									"type": "DatasetReference"
+								},
+								"firstRowOnly": false
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

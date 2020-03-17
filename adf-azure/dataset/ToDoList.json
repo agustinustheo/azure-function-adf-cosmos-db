@@ -1,0 +1,35 @@
+{
+	"name": "ToDoList",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "TrainingFunctions",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "varchar"
+			},
+			{
+				"name": "Description",
+				"type": "varchar"
+			},
+			{
+				"name": "PIC",
+				"type": "varchar"
+			},
+			{
+				"name": "isComplete",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ToDoList"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

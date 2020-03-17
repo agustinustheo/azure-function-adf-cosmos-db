@@ -1,0 +1,36 @@
+﻿{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "name": "req",
+      "type": "httpTrigger",
+      "direction": "in",
+      "methods": [
+        "get",
+        "post"
+      ]
+    },
+    {
+      "name": "$return",
+      "type": "http",
+      "direction": "out"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "outputDocument",
+      "databaseName": "ToDoList",
+      "collectionName": "Items",
+      "createIfNotExists": false,
+      "connectionStringSetting": "functions-db_DOCUMENTDB",
+      "direction": "out"
+    }
+  ],
+  "disabled": false,
+  "frameworks": {
+    "net46": {
+      "dependencies": {
+        "Microsoft.Azure.DocumentDB": "1.21.0"
+      }
+    }
+  }
+}
