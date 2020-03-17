@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Newtonsoft.Json;
+using Microsoft.Azure.Documents.Client;
 
 namespace HttpTriggerCSharpProject
 {
