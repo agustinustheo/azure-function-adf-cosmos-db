@@ -15,14 +15,14 @@ namespace azure_event_hub
         [JsonProperty("Attachments")]
         public List<Attachment> Attachments { get; set; }
         [JsonProperty("IsComplete")]
-        public bool IsComplete { get; set; }
+        public int IsComplete { get; set; }
         public void GetFromDocument(Document document)
         {
             this.ID = document.GetPropertyValue<string>("id");
             this.Description = document.GetPropertyValue<string>("description");
             this.PIC = document.GetPropertyValue<string>("pic");
             this.Attachments = document.GetPropertyValue<List<Attachment>>("attachments");
-            this.IsComplete = document.GetPropertyValue<bool>("isComplete");
+            this.IsComplete = document.GetPropertyValue<int>("isComplete");
         }
     }
 }

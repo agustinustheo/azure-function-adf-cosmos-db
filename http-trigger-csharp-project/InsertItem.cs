@@ -11,7 +11,7 @@ namespace HttpTriggerCSharpProject
     {
         [FunctionName("InsertItem")]
         public static HttpResponseMessage Run(
-            [EventHubTrigger("entytysh", Connection = "ifenhab")] string eventSingular,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage req,
             [CosmosDB(
                 databaseName: "ToDoList",
                 collectionName: "Items",

@@ -9,7 +9,7 @@ namespace azure_event_hub
     public static class InsertItem
     {
         [FunctionName("InsertItem")]
-        public static void Run([EventHubTrigger("EventHubName", Connection = "EventHubConnection")] string eventSingular,
+        public static void Run([EventHubTrigger("EventHubName", Connection = "EventHubConnection")] string triggerContent,
             [CosmosDB(
                 databaseName: "ToDoList",
                 collectionName: "Items",
@@ -18,7 +18,7 @@ namespace azure_event_hub
             ILogger log)
         {
             var exceptions = new List<Exception>();
-            newData = JsonConvert.DeserializeObject<ToDoItem>(eventSingular);
+            newData = JsonConvert.DeserializeObject<ToDoItem>(triggerContent);
         }
     }
 }
